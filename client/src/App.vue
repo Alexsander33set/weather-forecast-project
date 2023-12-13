@@ -14,6 +14,7 @@ console.log(preferences);
       <nav>
         <RouterLink to="/">Home</RouterLink>
         <RouterLink to="/about">About</RouterLink>
+        <RouterLink to="/about">{{ $t('salutation') }}</RouterLink>
       </nav>
     </div>
   </header>
