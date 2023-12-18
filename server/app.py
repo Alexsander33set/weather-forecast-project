@@ -1,8 +1,11 @@
 from flask import Flask, send_from_directory
 from gevent.pywsgi import WSGIServer
+from dotenv import load_dotenv
 from api.weather_api import weather_api_blueprint
 from api.languages import languages_blueprint
 from api.autocomplete import autocomplete_blueprint
+
+load_dotenv()
 
 app = Flask(__name__)
 
@@ -21,5 +24,6 @@ app.register_blueprint(autocomplete_blueprint)
 
 if __name__ == '__main__':
     # app.run(debug=False)
-    WSGIServer(('0.0.0.0', 8080), app).serve_forever()
+    http_server = WSGIServer(('0.0.0.0', 8080), app)
+    http_server.serve_forever()
 
