@@ -1,4 +1,5 @@
 from flask import Flask, send_from_directory
+from gevent.pywsgi import WSGIServer
 from api.weather_api import weather_api_blueprint
 from api.languages import languages_blueprint
 
@@ -17,4 +18,6 @@ app.register_blueprint(weather_api_blueprint)
 app.register_blueprint(languages_blueprint)
 
 if __name__ == '__main__':
-    app.run(debug=False)
+    # app.run(debug=False)
+    WSGIServer(('0.0.0.0', 8080), app).serve_forever()
+
