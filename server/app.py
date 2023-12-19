@@ -7,7 +7,7 @@ from api.languages import languages_blueprint
 from api.autocomplete import autocomplete_blueprint
 
 load_dotenv()
-PORT = os.getenv('PORT')
+PORT = int(os.getenv('PORT'))
 
 app = Flask(__name__)
 
