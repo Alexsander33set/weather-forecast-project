@@ -7,7 +7,7 @@ load_dotenv()
 
 languages_blueprint = Blueprint('languages', __name__)
 
-@languages_blueprint.route('/api/languages', methods=['GET', 'POST'])
+@languages_blueprint.route('/languages', methods=['GET', 'POST'])
 def get_languages():
   data = open('accepted_languages.json', encoding='utf-8')
   data = json.load(data)
