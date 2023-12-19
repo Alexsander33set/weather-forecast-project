@@ -7,6 +7,7 @@ import { createI18n } from 'vue-i18n'
 import App from './App.vue'
 import {pt_br, en_us} from './locales/translations'
 import router from './router'
+import './registerServiceWorker'
 
 const messages = {
   pt_br, en_us
