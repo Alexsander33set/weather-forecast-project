@@ -13,11 +13,11 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
-    return send_from_directory('../client/dist', 'index.html')
+    return send_from_directory('./templates', 'index.html')
 
 @app.route('/<path:path>')
 def serve_static(path):
-    return send_from_directory('../client/dist', path)
+    return send_from_directory('./templates', path)
 
 # ----- api routes -----
 app.register_blueprint(weather_api_blueprint)
