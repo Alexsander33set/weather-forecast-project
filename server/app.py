@@ -1,3 +1,4 @@
+import os
 from flask import Flask, send_from_directory
 from gevent.pywsgi import WSGIServer
 from dotenv import load_dotenv
@@ -6,6 +7,7 @@ from api.languages import languages_blueprint
 from api.autocomplete import autocomplete_blueprint
 
 load_dotenv()
+PORT = os.getenv('PORT')
 
 app = Flask(__name__)
 
@@ -24,6 +26,6 @@ app.register_blueprint(autocomplete_blueprint)
 
 if __name__ == '__main__':
     # app.run(debug=False)
-    http_server = WSGIServer(('0.0.0.0', 8080), app)
+    http_server = WSGIServer(('0.0.0.0', PORT), app)
     http_server.serve_forever()
 
