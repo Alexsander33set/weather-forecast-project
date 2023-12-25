@@ -1,8 +1,21 @@
 export const pt_br = {
-  "salutation":"Olá Mundo!"
+  "app_name":"Previsão do Tempo",
+  "salutation":"Olá Mundo!",
+  "error":{
+    "theme": "O tema esperado, não está disponível!"
+  },
+  "link_label":
+  {
+    "homepage":"Página Inicial"
+  }
 }
 
 
 export const en_us = {
-  "salutation":"Hello World!"
+  "app_name":"Weather Forecast",
+  "salutation":"Hello World!",
+  "link_label":
+  {
+    "homepage":"Homepage"
+  }
 }
