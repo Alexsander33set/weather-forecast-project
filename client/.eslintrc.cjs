@@ -3,14 +3,16 @@ require('@rushstack/eslint-patch/modern-module-resolution')
 
 module.exports = {
   root: true,
-  "extends": [
+  extends: [
     'plugin:vue/vue3-essential',
     'eslint:recommended',
     '@vue/eslint-config-prettier/skip-formatting',
-    "prettier"
+    "prettier",
+    'plugin:vue/base',
+    'plugin:vuetify/base'
   ],
   parserOptions: {
     ecmaVersion: 'latest'
   },
-  rules: { "vue/no-multiple-template-root": 0 }
+  rules: {"vue/no-multiple-template-root": "off" }
 }

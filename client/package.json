@@ -10,12 +10,14 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@mdi/font": "7.0.96",
     "axios": "^1.6.2",
     "pinia": "^2.1.7",
     "register-service-worker": "^1.7.2",
     "vue": "^3.3.4",
     "vue-i18n": "9",
-    "vue-router": "^4.2.5"
+    "vue-router": "^4.2.5",
+    "vuetify": "^3.4.8"
   },
   "devDependencies": {
     "@rushstack/eslint-patch": "^1.3.3",
@@ -24,7 +26,9 @@
     "@vue/eslint-config-prettier": "^8.0.0",
     "eslint": "^8.49.0",
     "eslint-plugin-vue": "^9.17.0",
+    "eslint-plugin-vuetify": "^2.1.1",
     "prettier": "^3.0.3",
-    "vite": "^4.4.11"
+    "vite": "^4.4.11",
+    "vite-plugin-vuetify": "^2.0.1"
   }
 }
