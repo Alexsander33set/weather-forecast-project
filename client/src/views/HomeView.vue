@@ -1,37 +1,37 @@
-<script>
+<script setup>
 import axios from 'axios'
+import { ref, computed } from 'vue';
+import { userPreferences } from '@/stores/userPreferences'
 
-export default {
-  name: "HomeView",
-  data() {
-    return {
-      response: {},
-      searchCities: '',
-      autocompleteResponse: {},
-      model: null,
-      expand: null,
-    }
-  },
-  created() {
+const preferences = userPreferences()
 
-  },
-  methods: {
-    requestAPI() {
-      axios.get('api/weather-data', { params: { lat: "-22", lon: "-44", lang: "pt_br", } })
-        .then(res => { this.response = res })
-    },
-    getPredictions() {
-      axios.get('api/autocomplete', { params: { input: "camp", lang: "pt_br" } })
-        .then(res => { this.autocompleteResponse = res })
-    }
-  },
+const response= ref({})
+const searchCities= ref('')
+const autocompleteResponse= ref({}) 
+const model= ref(null) 
+const expand= ref(null)
+
+function requestAPI() {
+  axios.get('api/weather-data', { params: { lat: "-22", lon: "-44", lang: "pt_br", } })
+    .then(res => { this.response = res })
 }
+const weatherData = computed(() => {
+  return preferences.theme
+})
+
+
+
+function getPredictions() {
+  axios.get('api/autocomplete', { params: { input: "camp", lang: "pt_br" } })
+    .then(res => { this.autocompleteResponse = res })
+}
+
 </script>
 
 <template>
   <v-container class="alerts">
     <v-alert density="compact" type="warning" title="Alert title"
-      text="Lorem ipsum dolor sit amet consectetur adipisicing elit. Commodi, ratione debitis quis est labore voluptatibus! Eaque cupiditate minima, at placeat totam, magni doloremque veniam neque porro libero rerum unde voluptatem!"></v-alert>
+      :text="weatherData"></v-alert>
   </v-container>
   <v-container class="current">
     <v-card class="mx-auto" density="comfortable">
@@ -77,7 +77,7 @@ export default {
     </v-card>
   </v-container>
   <v-container class="hourly">
-    <v-title>Hourly</v-title>
+    <h3>Hourly</h3>
     <v-sheet class="mx-auto">
       <v-slide-group v-model="model" class="pa-4" selected-class="bg-primary" show-arrows>
         <v-slide-group-item v-for="n in 15" :key="n" v-slot="{ isSelected, toggle, selectedClass }">
@@ -103,7 +103,7 @@ export default {
     </v-sheet>
   </v-container>
   <v-container class="daily">
-    <v-title>Daily</v-title>
+    <h3>Daily</h3>
     <v-container>
       <v-btn @click="requestAPI"> Get Weather data</v-btn>
       <hr>

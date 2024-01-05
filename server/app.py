@@ -1,5 +1,5 @@
 import os
-from flask import Flask, send_from_directory
+from flask import Flask, send_from_directory, request
 from gevent.pywsgi import WSGIServer
 from dotenv import load_dotenv
 from api.weather_api import weather_api_blueprint
@@ -17,6 +17,10 @@ def index():
 @app.route('/<path:path>')
 def serve_static(path):
     return send_from_directory('./templates', path)
+
+@app.route('/get_ip', methods=['GET'])
+def get_ip():
+    return request.remote_addr
 
 # ----- api routes -----
 app.register_blueprint(weather_api_blueprint)

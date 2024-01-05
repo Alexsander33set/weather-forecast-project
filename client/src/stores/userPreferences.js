@@ -1,49 +1,53 @@
 import { defineStore } from 'pinia'
+import { ref } from 'vue'
 
-export const userPreferences = defineStore('userPreferences', {
-  //* DECLARATION
-  state: () => {
-    return { 
-      language: '',
-      metricUnit: '',
-      theme: localStorage.getItem('theme') || 'light',
-      acceptedMetricUnits:['C','F'],
-      acceptedThemes:['light','dark'],
-      acceptedLanguages:[
-        {
-          label:"Português Brasil",
-          value:"pt_br"
-        },
-        {
-          label:"English",
-          value:"en"
-        }
-      ]
 
+export const userPreferences = defineStore('userPreferences', () => {
+  const language = ref('en_us')
+  const acceptedLanguages = [
+    {
+      label:"Português Brasil",
+      value:"pt_br"
+    },
+    {
+      label:"English",
+      value:"en_us"
     }
-  },
-  
-  //* METHODS
-  actions: {
-    setLanguage(newValue){
-      // Is newValue in acceptedLanguages?
+  ]
+
+  function setLanguage(newValue){
+    console.log(newValue)
+    if (acceptedLanguages.map(i => i.value).includes(newValue)){
       this.language = newValue
-    },
-    setMetricUnit(newValue){
-      // Is newValue in acceptedMetricUnits?
-      this.MetricUnit = newValue
-    },
-    setTheme(newValue){
-      if (this.acceptedThemes.includes(newValue)){
-        localStorage.setItem('theme', this.theme);
-        this.theme = newValue
-      }else{console.error("ERROR: Theme invalid");}  
-    },
-  },
+    }else{console.error("ERROR: Language invalid")}  
+  }
   
-  //* COMPUTED
-  getters: {
-    
+  
+  
+  const metricUnit = ref('')
+  const acceptedMetricUnits = ['C','F']
+
+  function setMetricUnit(newValue){
+    if (acceptedMetricUnits.value.includes(newValue)){
+      this.metricUnit = newValue;}
+    else{console.error("ERROR: Metric Unit invalid")}
+  }
+
+
+
+  const theme = ref('light') 
+  const acceptedThemes = ['light','dark']
+
+  function setTheme(newValue){
+    if (acceptedThemes.includes(newValue)){
+      this.theme = newValue}
+    else{console.error("ERROR: Theme invalid");}  
+  }
+
+
+  return {
+    language, acceptedLanguages, setLanguage,
+    metricUnit, setMetricUnit,
+    theme, setTheme
   }
 })
-

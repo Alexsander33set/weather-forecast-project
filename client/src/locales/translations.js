@@ -1,8 +1,13 @@
+/* spell-checker: disable */
+
 export const pt_br = {
   "app_name":"Previsão do Tempo",
-  "salutation":"Olá Mundo!",
   "error":{
     "theme": "O tema esperado, não está disponível!"
+  },
+  "header":{
+    "theme_tooltip":"Mudar tema",
+    "language_tooltip":"Mudar Lingua"
   },
   "link_label":
   {
@@ -13,7 +18,10 @@ export const pt_br = {
 
 export const en_us = {
   "app_name":"Weather Forecast",
-  "salutation":"Hello World!",
+  "header":{
+    "theme_tooltip":"change theme",
+    "language_tooltip":"change language"
+  },
   "link_label":
   {
     "homepage":"Homepage"
