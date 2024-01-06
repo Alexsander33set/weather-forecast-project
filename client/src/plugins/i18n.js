@@ -7,7 +7,7 @@ const messages = {
 }
 
 export default createI18n({
-  locale: JSON.parse(localStorage.getItem("userPreferences")).language || 'en',
+  locale: 'en',
   fallbackLocale: "en_us",
   messages
 })
