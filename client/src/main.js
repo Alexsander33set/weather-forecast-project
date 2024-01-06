@@ -2,7 +2,6 @@
 // Plugins
 import { registerPlugins } from '@/plugins'
 import App from './App.vue'
-import './registerServiceWorker'
 
 import { createApp } from 'vue'
 
