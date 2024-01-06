@@ -20,7 +20,7 @@ def serve_static(path):
 
 @app.route('/get_ip', methods=['GET'])
 def get_ip():
-    return request.remote_addr
+    return request.headers.get('X-Forwarded-For', request.remote_addr)
 
 # ----- api routes -----
 app.register_blueprint(weather_api_blueprint)
