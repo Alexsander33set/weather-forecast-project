@@ -10,20 +10,69 @@ const searchCities= ref('')
 const autocompleteResponse= ref({}) 
 const model= ref(null) 
 const expand= ref(null)
+const IPResponse = ref({})
+const geolocation = ref({
+  'city': '',
+  'region': '',
+  'country': '',
+  'fullAddress': '',
+  'lat': '',
+  'lon': '',
+  'timestamp':''
+
+})
+
+function IPGeolocation(){
+  axios.get('api/ip-geolocation')
+  .then((res)=>{
+    this.IPResponse = res
+    console.log(res)
+    console.log('-' * 10)
+    this.geolocation = {
+      'city': res.data.city,
+      'region': res.data.region,
+      'country': res.data.country,
+      'fullAddress': `${res.data.city}, ${res.data.region}, ${res.data.country}, `,
+      'lat': res.data.loc.split(',')[0],
+      'lon': res.data.loc.split(',')[1],
+      'timestamp':new Date()
+    }
+    console.log('-' * 10)
+    console.log('this.geolocation:')
+    console.log(this.geolocation)
+  })
+  .catch((err) =>{console.error(err)})
+}
 
 function requestAPI() {
-  axios.get('api/weather-data', { params: { lat: "-22", lon: "-44", lang: "pt_br", } })
-    .then(res => { this.response = res })
+  axios.get('api/weather-data', { params: { lat: "-22", lon: "-44", lang: preferences.language, } })
+    .then(res => {  return res })
 }
 const weatherData = computed(() => {
   return preferences.theme
 })
 
-
-
 function getPredictions() {
   axios.get('api/autocomplete', { params: { input: "camp", lang: "pt_br" } })
     .then(res => { this.autocompleteResponse = res })
+}
+
+/* 
+* First Login
+  * check local storage
+  * if yes, check how much time
+  * if no, request data with IP and pull a modal requesting geolocation
+*/
+function firstLogin() {
+  const getWeatherForecast = localStorage.get('weatherForecast')
+  const setLocalStorage = localStorage.set('xx', JSON.stringify({}))
+  if(getWeatherForecast) { return this.isFirstLogin = false}
+  else {
+    const ipData = requestAPI()
+    ipData.data
+  }
+
+// firstLogin()
 }
 
 </script>
@@ -120,6 +169,12 @@ function getPredictions() {
       <div>
         {{ autocompleteResponse }}
       </div>
+    </v-container>
+    <v-container>
+      <v-btn @click="IPGeolocation()"> Get IP Data</v-btn>
+      <hr>
+      <h3>Response:</h3>
+      <p>{{ IPResponse }}</p>
     </v-container>
   </v-container>
 </template>
