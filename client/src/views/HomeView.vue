@@ -25,9 +25,9 @@ const geolocation = ref({
 function IPGeolocation(){
   axios.get('api/ip-geolocation')
   .then((res)=>{
-    IPResponse.value = res
+    IPResponse.value = res.data
     console.log(res)
-    console.log('-' * 10)
+    console.log('--------------------------------------')
     geolocation.value = {
       'city': res.data.city,
       'region': res.data.region,
@@ -38,8 +38,8 @@ function IPGeolocation(){
       'timestamp':new Date()
     }
     console.log('--------------------------------------')
-    console.log('this.geolocation:')
-    console.log(this.geolocation)
+    console.log('geolocation:')
+    console.log(geolocation)
   })
   .catch((err) =>{console.error(err)})
 }
@@ -175,6 +175,8 @@ function firstLogin() {
       <hr>
       <h3>Response:</h3>
       <p>{{ IPResponse }}</p>
+      <hr>
+      <p>{{ geolocation }}</p>
     </v-container>
   </v-container>
 </template>
