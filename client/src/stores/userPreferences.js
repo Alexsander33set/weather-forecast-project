@@ -1,9 +1,11 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 
+import { useTheme } from 'vuetify'
+
 
 export const userPreferences = defineStore('userPreferences', () => {
-  const language = ref('en_us')
+  const language = ref('pt_br')
   const acceptedLanguages = [
     {
       label:"Português Brasil",
@@ -15,16 +17,21 @@ export const userPreferences = defineStore('userPreferences', () => {
     }
   ]
 
-  function setLanguage(newValue){
-    console.log(newValue)
-    if (acceptedLanguages.map(i => i.value).includes(newValue)){
-      this.language = newValue
-    }else{console.error("ERROR: Language invalid")}  
+  function toggleLanguage(i18n, newValue) {
+    if (i18n.availableLocales.includes(newValue)) {
+      try {
+        i18n.locale = newValue
+        this.language = newValue
+        console.log('language changed to: '+i18n.locale)
+      } catch (error) {
+        console.error(error);
+      } 
+    }
   }
   
   
   
-  const metricUnit = ref('')
+  const metricUnit = ref('C')
   const acceptedMetricUnits = ['C','F']
 
   function setMetricUnit(newValue){
@@ -34,20 +41,18 @@ export const userPreferences = defineStore('userPreferences', () => {
   }
 
 
+  const theme = useTheme().global
+  // const appTheme = ref('light') 
 
-  const theme = ref('light') 
-  const acceptedThemes = ['light','dark']
-
-  function setTheme(newValue){
-    if (acceptedThemes.includes(newValue)){
-      this.theme = newValue}
-    else{console.error("ERROR: Theme invalid");}  
+  function toggleTheme() {
+    theme.name.value = theme.current.value.dark ? 'light' : 'dark'
+    this.preferences.theme = theme.name.value
   }
 
 
   return {
-    language, acceptedLanguages, setLanguage,
+    language, acceptedLanguages, toggleLanguage,
     metricUnit, setMetricUnit,
-    theme, setTheme
+    theme, toggleTheme
   }
 })

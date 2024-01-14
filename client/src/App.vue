@@ -1,5 +1,4 @@
 <script setup>
-import { ref } from 'vue';
 import { RouterView } from 'vue-router'
 
 import { useTheme } from 'vuetify'
@@ -11,7 +10,7 @@ const preferences = userPreferences()
 
 function toggleTheme() {
   theme.name.value = theme.current.value.dark ? 'light' : 'dark'
-  this.preferences.setTheme(theme.name.value);
+  this.preferences.theme = theme.name.value
 }
 
 //*
@@ -24,7 +23,6 @@ function toggleTheme() {
       <v-toolbar-title>{{ $t('app_name') }}</v-toolbar-title>
       <v-spacer></v-spacer>
       <template v-slot:append>
-
         <v-tooltip :text="$t('header.theme_tooltip')" location="bottom">
           <template v-slot:activator="{ props }">
             <v-btn id="theme-changer" @click="toggleTheme()" icon="mdi-theme-light-dark" color="primary" v-bind="props">
@@ -36,7 +34,7 @@ function toggleTheme() {
             <v-btn icon="mdi-translate" v-bind="props" color="primary"></v-btn>
           </template>
           <v-list>
-            <v-list-item v-for="(language, index) in preferences.acceptedLanguages" :key="index" :value="language.value" @click="preferences.setLanguage(language.value)">
+            <v-list-item v-for="(language, index) in preferences.acceptedLanguages" :key="index" :value="language.value" @click="preferences.toggleLanguage($i18n, language.value)">
               <v-list-item-title>{{language.label}}</v-list-item-title>
             </v-list-item>
           </v-list>
