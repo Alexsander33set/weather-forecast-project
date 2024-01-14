@@ -25,10 +25,10 @@ const geolocation = ref({
 function IPGeolocation(){
   axios.get('api/ip-geolocation')
   .then((res)=>{
-    this.IPResponse = res
+    IPResponse.value = res
     console.log(res)
     console.log('-' * 10)
-    this.geolocation = {
+    geolocation.value = {
       'city': res.data.city,
       'region': res.data.region,
       'country': res.data.country,
