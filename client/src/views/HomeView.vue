@@ -37,7 +37,7 @@ function IPGeolocation(){
       'lon': res.data.loc.split(',')[1],
       'timestamp':new Date()
     }
-    console.log('-' * 10)
+    console.log('--------------------------------------')
     console.log('this.geolocation:')
     console.log(this.geolocation)
   })
