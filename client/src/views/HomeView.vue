@@ -5,12 +5,10 @@ import { userPreferences } from '@/stores/userPreferences'
 
 const preferences = userPreferences()
 
-const response= ref({})
-const searchCities= ref('')
-const autocompleteResponse= ref({}) 
 const model= ref(null) 
 const expand= ref(null)
-const IPResponse = ref({})
+const isFirstLogin = ref(true)
+const bruteWeatherData = ref({})
 const geolocation = ref({
   'city': '',
   'region': '',
@@ -22,12 +20,20 @@ const geolocation = ref({
 
 })
 
+function getWeatherData(lat, lon){
+  if (!lat || !lon) {return}
+  axios.get('api/weather-data', { params: { lat: lat, lon: lon, lang: preferences.language, } })
+    .then(res => {
+      bruteWeatherData.value = res.data;
+      bruteWeatherData.value.timestamp = new Date()
+      localStorage.set('lastWeatherData', JSON.stringify(bruteWeatherData.value));
+    })
+    .catch(err =>{console.error(err)})
+}
+
 function IPGeolocation(){
   axios.get('api/ip-geolocation')
   .then((res)=>{
-    IPResponse.value = res.data
-    console.log(res)
-    console.log('--------------------------------------')
     geolocation.value = {
       'city': res.data.city,
       'region': res.data.region,
@@ -37,25 +43,19 @@ function IPGeolocation(){
       'lon': res.data.loc.split(',')[1],
       'timestamp':new Date()
     }
-    console.log('--------------------------------------')
-    console.log('geolocation:')
-    console.log(geolocation)
   })
   .catch((err) =>{console.error(err)})
 }
 
-function requestAPI() {
-  axios.get('api/weather-data', { params: { lat: "-22", lon: "-44", lang: preferences.language, } })
-    .then(res => {  return res })
-}
+
 const weatherData = computed(() => {
   return preferences.theme
 })
 
-function getPredictions() {
-  axios.get('api/autocomplete', { params: { input: "camp", lang: "pt_br" } })
-    .then(res => { this.autocompleteResponse = res })
-}
+// function getPredictions() {
+//   axios.get('api/autocomplete', { params: { input: "camp", lang: "pt_br" } })
+//     .then(res => { this.autocompleteResponse = res })
+// }
 
 /* 
 * First Login
@@ -64,17 +64,16 @@ function getPredictions() {
   * if no, request data with IP and pull a modal requesting geolocation
 */
 function firstLogin() {
-  const getWeatherForecast = localStorage.get('weatherForecast')
-  const setLocalStorage = localStorage.set('xx', JSON.stringify({}))
-  if(getWeatherForecast) { return this.isFirstLogin = false}
+  let getWeatherForecast = localStorage.getItem(('lastWeatherData'))
+  if(getWeatherForecast) { isFirstLogin.value = false}
   else {
-    const ipData = requestAPI()
-    ipData.data
+    IPGeolocation()
+    getWeatherData(geolocation.value.lat, geolocation.value.lon)
   }
-
-// firstLogin()
 }
 
+
+firstLogin()
 </script>
 
 <template>
@@ -153,30 +152,13 @@ function firstLogin() {
   </v-container>
   <v-container class="daily">
     <h3>Daily</h3>
-    <v-container>
-      <v-btn @click="requestAPI"> Get Weather data</v-btn>
-      <hr>
-      <h3>Response:</h3>
-      <p>{{ response }}</p>
-    </v-container>
-    <v-container>
-        <v-btn @click="getPredictions">Get autocomplete</v-btn>
-        <v-autocomplete label="Search Cities" v-model="searchCities"
-          :items="['California', 'Colorado', 'Florida', 'Georgia', 'Texas', 'Wyoming']">
-        </v-autocomplete>
-      <hr>
-      <h3>Response:</h3>
-      <div>
-        {{ autocompleteResponse }}
-      </div>
-    </v-container>
-    <v-container>
-      <v-btn @click="IPGeolocation()"> Get IP Data</v-btn>
-      <hr>
-      <h3>Response:</h3>
-      <p>{{ IPResponse }}</p>
-      <hr>
-      <p>{{ geolocation }}</p>
-    </v-container>
+    <hr>
+    <h4>Geolocation:</h4>
+    <div>
+      {{ geolocation }}
+    </div>
+    <hr>
+    <h4>WeatherData</h4>
+    <div>{{ bruteWeatherData }}</div>
   </v-container>
 </template>
