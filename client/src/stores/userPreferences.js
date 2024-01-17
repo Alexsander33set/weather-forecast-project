@@ -1,11 +1,13 @@
 import { defineStore } from 'pinia'
-import { ref } from 'vue'
-
+import { ref, watch } from 'vue'
 import { useTheme } from 'vuetify'
+import { useI18n } from 'vue-i18n'
 
 
 export const userPreferences = defineStore('userPreferences', () => {
-  const language = ref('pt_br')
+  const { locale } = useI18n()
+  
+  const language = ref(locale.value)
   const acceptedLanguages = [
     {
       label:"Português Brasil",
@@ -17,20 +19,33 @@ export const userPreferences = defineStore('userPreferences', () => {
     }
   ]
 
+  if (localStorage.getItem("language")){
+    language.value = JSON.parse(localStorage.getItem("language"))
+    locale.value = JSON.parse(localStorage.getItem("language"))
+    console.log("OPA, tem coisa de language: " + language.value);
+  }
+  watch(
+    language,
+    (languageValue) => {
+      localStorage.setItem("language", JSON.stringify(languageValue))
+    },
+    { deep: true}
+  )
+
   function toggleLanguage(i18n, newValue) {
     if (i18n.availableLocales.includes(newValue)) {
       try {
         i18n.locale = newValue
-        this.language = newValue
+        language.value = newValue
         console.log('language changed to: '+i18n.locale)
       } catch (error) {
         console.error(error);
       } 
     }
   }
-  
-  
-  
+
+
+
   const metricUnit = ref('C')
   const acceptedMetricUnits = ['C','F']
 
@@ -41,13 +56,27 @@ export const userPreferences = defineStore('userPreferences', () => {
   }
 
 
-  const theme = useTheme().global
-  // const appTheme = ref('light') 
+
+  const theme = ref(useTheme().global.name.value)
+
+  if (localStorage.getItem("theme")){
+    theme.value = JSON.parse(localStorage.getItem("theme"))
+    console.info(useTheme().global)
+    console.log("OPA, tem coisa de tema: " + theme.value);
+  }
+  watch(
+    theme,
+    (themeValue) => {
+      localStorage.setItem("theme", JSON.stringify(themeValue))
+    },
+    { deep: true}
+  )
 
   function toggleTheme() {
-    theme.name.value = theme.current.value.dark ? 'light' : 'dark'
-    this.preferences.theme = theme.name.value
+    useTheme().global.value.name.value = useTheme().global.value.current.value.dark ? 'light' : 'dark'
+    this.theme = useTheme().global.value.name.value
   }
+
 
 
   return {

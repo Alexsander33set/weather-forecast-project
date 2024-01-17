@@ -1,19 +1,26 @@
 <script setup>
 import { RouterView } from 'vue-router'
-
 import { useTheme } from 'vuetify'
 import { userPreferences } from '@/stores/userPreferences'
 
 const theme = useTheme().global
 const preferences = userPreferences()
-//* CHECK PREFERENCES (FIRST LOGIN, IF NOT, DEFAULT IN STORAGE)
+
+//*TO COMPLETE (move to userPreferences)
+if (localStorage.getItem("theme")){
+  theme.name.value = JSON.parse(localStorage.getItem("theme"))
+  preferences.theme = theme.name.value
+}
+
 
 function toggleTheme() {
+  //* [Vuetify] useTheme must be called from inside a setup function
   theme.name.value = theme.current.value.dark ? 'light' : 'dark'
   this.preferences.theme = theme.name.value
 }
 
-//*
+
+//* CHECK PREFERENCES (FIRST LOGIN, IF NOT, DEFAULT IN STORAGE)
 
 </script>
 
