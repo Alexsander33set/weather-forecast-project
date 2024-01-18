@@ -70,7 +70,7 @@ export const userPreferences = defineStore('userPreferences', () => {
 
   if (localStorage.getItem("theme")){
     theme.value = JSON.parse(localStorage.getItem("theme"))
-    console.info(useTheme().global)
+    useTheme().global.name.value = JSON.parse(localStorage.getItem("theme"))
     console.log("OPA, tem coisa de tema: " + theme.value);
   }
   watch(

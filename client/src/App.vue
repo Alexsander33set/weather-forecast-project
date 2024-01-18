@@ -7,10 +7,6 @@ const theme = useTheme().global
 const preferences = userPreferences()
 
 //*TO COMPLETE (move to userPreferences)
-if (localStorage.getItem("theme")){
-  theme.name.value = JSON.parse(localStorage.getItem("theme"))
-  preferences.theme = theme.name.value
-}
 
 
 function toggleTheme() {
