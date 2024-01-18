@@ -1,6 +1,6 @@
 <script setup>
 import axios from 'axios'
-import { ref, computed } from 'vue';
+import { ref, computed, watch } from 'vue';
 import { userPreferences } from '@/stores/userPreferences'
 
 const preferences = userPreferences()
@@ -19,6 +19,20 @@ const geolocation = ref({
   'timestamp':''
 
 })
+
+
+if (localStorage.getItem("geolocation")){
+    geolocation.value = JSON.parse(localStorage.getItem("geolocation"))
+  }
+  watch(
+    geolocation,
+    (newValue) => {
+      localStorage.setItem("geolocation", JSON.stringify(newValue))
+    },
+    { deep: true}
+  )
+
+
 
 function getWeatherData(lat, lon){
   if (!lat || !lon) {return}
@@ -68,6 +82,7 @@ function firstLogin() {
   if(getWeatherForecast) { isFirstLogin.value = false}
   else {
     IPGeolocation()
+    if (!geolocation.value.lat || !geolocation.value.lon){return console.log("Geolocation not valid");}
     getWeatherData(geolocation.value.lat, geolocation.value.lon)
   }
 }
