@@ -23,6 +23,15 @@ export const userPreferences = defineStore('userPreferences', () => {
     language.value = JSON.parse(localStorage.getItem("language"))
     locale.value = JSON.parse(localStorage.getItem("language"))
     console.log("OPA, tem coisa de language: " + language.value);
+  }else{
+    let PrefLangByNavigator = (navigator.language.replace("-","_")).toLowerCase()
+
+    acceptedLanguages.map((language) => {
+      if (language.value == PrefLangByNavigator) {
+        language.value = PrefLangByNavigator
+        locale.value = PrefLangByNavigator
+      }
+    })
   }
   watch(
     language,
