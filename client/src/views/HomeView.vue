@@ -77,13 +77,13 @@ const weatherData = computed(() => {
   * if yes, check how much time
   * if no, request data with IP and pull a modal requesting geolocation
 */
-function firstLogin() {
+async function firstLogin() {
   let getWeatherForecast = localStorage.getItem(('lastWeatherData'))
   if(getWeatherForecast) { isFirstLogin.value = false}
   else {
-    IPGeolocation()
-    if (!geolocation.value.lat || !geolocation.value.lon){return console.log("Geolocation not valid");}
-    getWeatherData(geolocation.value.lat, geolocation.value.lon)
+    await IPGeolocation()
+    if (!geolocation.value.lat || !geolocation.value.lon){return console.log(`Geolocation not valid | lat:${geolocation.value.lat} | lon:${geolocation.value.lon} |`);}
+    await getWeatherData(geolocation.value.lat, geolocation.value.lon)
   }
 }
 
