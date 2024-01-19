@@ -51,7 +51,7 @@ function getWeatherData(lat, lon){
     .then(res => {
       bruteWeatherData.value = res.data;
       bruteWeatherData.value.timestamp = new Date()
-      localStorage.set('lastWeatherData', JSON.stringify(bruteWeatherData.value));
+      localStorage.setItem('lastWeatherData', JSON.stringify(bruteWeatherData.value));
     })
     .catch(err =>{console.error(err)})
 }
