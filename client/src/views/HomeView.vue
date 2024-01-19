@@ -9,6 +9,18 @@ const model= ref(null)
 const expand= ref(null)
 const isFirstLogin = ref(true)
 const bruteWeatherData = ref({})
+
+if (localStorage.getItem("lastWeatherData")){
+    bruteWeatherData.value = JSON.parse(localStorage.getItem("bruteWeatherData"))
+  }
+  watch(
+    bruteWeatherData,
+    (newValue) => {
+      localStorage.setItem("lastWeatherData", JSON.stringify(newValue))
+    },
+    { deep: true}
+  )
+
 const geolocation = ref({
   'city': '',
   'region': '',
@@ -19,7 +31,6 @@ const geolocation = ref({
   'timestamp':''
 
 })
-
 
 if (localStorage.getItem("geolocation")){
     geolocation.value = JSON.parse(localStorage.getItem("geolocation"))
