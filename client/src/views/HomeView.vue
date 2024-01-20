@@ -11,7 +11,7 @@ const isFirstLogin = ref(true)
 const bruteWeatherData = ref({})
 
 if (localStorage.getItem("lastWeatherData")){
-    bruteWeatherData.value = JSON.parse(localStorage.getItem("bruteWeatherData"))
+    bruteWeatherData.value = JSON.parse(localStorage.getItem("lastWeatherData"))
   }
   watch(
     bruteWeatherData,
