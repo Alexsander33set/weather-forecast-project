@@ -18,7 +18,7 @@ def get_weather_data():
     def valid_params(lat, lon, lang):
         def check_lang(lang):
             pattern = re.compile(r'^[a-z]{2}_[a-z]{2}$')
-            print(lang, f'| {bool(pattern.match(lang))}')
+            print(lang, f'| Language available >> {bool(pattern.match(lang))}')
             return bool(pattern.match(lang))
         def check_coordinates(lat, lon):
             try:
