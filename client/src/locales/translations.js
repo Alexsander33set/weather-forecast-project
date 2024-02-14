@@ -12,7 +12,8 @@ export const pt_br = {
   "link_label":
   {
     "homepage":"Página Inicial"
-  }
+  },
+  "months": ['janeiro', 'fevereiro', 'março', 'abril', 'maio', 'junho', 'julho', 'agosto', 'setembro', 'outubro', 'novembro', 'dezembro']
 }
 
 
@@ -25,5 +26,6 @@ export const en_us = {
   "link_label":
   {
     "homepage":"Homepage"
-  }
+  },
+  "months": ['january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december']
 }
