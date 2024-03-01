@@ -160,7 +160,7 @@ firstLogin()
   </v-container>
   <HourlyGraph :hourlyList="hourlyForecast"/>
   <v-container class="daily">
-    <h3>Hourly</h3>
+    <h3>Daily</h3>
     <v-sheet class="mx-auto">
       <v-slide-group v-model="model" class="pa-4" selected-class="bg-primary" show-arrows>
         <v-slide-group-item v-for="(day, index) in dailyForecast" :key="index" v-slot="{ isSelected, toggle, selectedClass }">
@@ -168,7 +168,7 @@ firstLogin()
             <div class="d-flex flex-column fill-height align-center justify-center pa-3">
               <h3 class="text-h6">{{ new Date(day.dt * 1000).getDate() }}/{{$t(`months.${parseInt(new Date(day.dt * 1000).getMonth())}`).substring(0, 3)}}</h3>
               <img :src="'https://openweathermap.org/img/wn/'+day.weather[0].icon+'@2x.png'" :alt="day.weather[0].description" />
-              <p class="text-body-1">{{ `${day.temp.eve} °${preferences.metricUnit}` }}</p>
+              <p class="text-body-1">{{ `${preferences.unitConverter.kelvinToCelsius(day.temp.eve)} °${preferences.metricUnit}` }}</p>
               <!-- <v-scale-transition>
                 <v-icon v-if="isSelected" color="white" size="48" icon="mdi-close-circle-outline"></v-icon>
               </v-scale-transition> -->
@@ -182,37 +182,17 @@ firstLogin()
           <div class="d-flex flex-column fill-height justify-center">
             <h3 class="text-h6">
               {{ 
-                new Date(dailyForecast[model].dt * 1000).getDate() 
+                new Date(dailyForecast[model].dt * 1000).getDate() + ' ' + capitalizeFirstLetter($t(`months.${parseInt(new Date(dailyForecast[model].dt * 1000).getMonth())}`))
               }}
-              {{
-                capitalizeFirstLetter($t(`months.${parseInt(new Date(dailyForecast[model].dt * 1000).getMonth())}`).substring(0, 3))
-              }}
+
             </h3>
             <hr>
-            <p class="text-body-1">{{ hourlyForecast[model].weather }}</p>
+            <p class="text-body-1">{{ hourlyForecast[model] }}</p>
+            <hr>
+            <p></p>
           </div>
         </v-sheet>
       </v-expand-transition>
     </v-sheet>
-  </v-container>
-  <v-container>
-    <h3>Daily</h3>
-    <hr>
-    <h4>Geolocation:</h4>
-    <div>
-      {{ geolocation }}
-    </div>
-    <hr>
-    
-  </v-container>
-  <v-container>
-    <h4>WeatherData</h4>
-  {{ forecastAlerts }}
-  <hr>
-  {{ currentForecast }}
-  <hr>
-  {{ dailyForecast }}
-  <hr>
-  {{ hourlyForecast }}
   </v-container>
 </template>

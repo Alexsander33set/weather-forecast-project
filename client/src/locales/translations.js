@@ -13,19 +13,63 @@ export const pt_br = {
   {
     "homepage":"Página Inicial"
   },
-  "months": ['janeiro', 'fevereiro', 'março', 'abril', 'maio', 'junho', 'julho', 'agosto', 'setembro', 'outubro', 'novembro', 'dezembro']
+  "months": [
+    'Janeiro',
+    'Fevereiro',
+    'Março',
+    'Abril',
+    'Maio',
+    'Junho',
+    'Julho',
+    'Agosto',
+    'Setembro',
+    'Outubro',
+    'Novembro',
+    'Dezembro'
+  ],
+  "weekdays": [
+    "Domingo",
+    "Segunda-feira",
+    "Terça-feira",
+    "Quarta-feira",
+    "Quinta-feira",
+    "Sexta-feira",
+    "Sábado"]
+
 }
 
 
 export const en_us = {
   "app_name":"Weather Forecast",
   "header":{
-    "theme_tooltip":"change theme",
-    "language_tooltip":"change language"
+    "theme_tooltip":"Change theme",
+    "language_tooltip":"Change language"
   },
   "link_label":
   {
     "homepage":"Homepage"
   },
-  "months": ['january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december']
+  "months": [
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'august',
+    'september',
+    'october',
+    'november',
+    'december'
+  ],
+  "weekdays": [
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday"
+  ]
 }
