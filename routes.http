@@ -1,12 +1,10 @@
-#* Weather Forecast
+###*  Get weather forecast 
 
-GET http://127.0.0.1:8080/api/weather-data?lat=-22&lon=-44&lang=en_us HTTP/1.1
+GET http://127.0.0.1:8080/api/weather-data?lat=-22&lon=-44&lang=en_us
 
-###
+###* Get user city by ip
+GET http://127.0.0.1:8080/api/ip-geolocation
 
-#* User city by ip
-GET http://127.0.0.1:8080/api/ip-geolocation HTTP/1.1
 
-###
-#* tests
-http://127.0.0.1:8080/get_ip
+###* Get user IP 
+http://127.0.0.1:8080/api/ip-geolocation
