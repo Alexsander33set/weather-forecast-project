@@ -57,6 +57,28 @@ export const userPreferences = defineStore('userPreferences', () => {
 
   const metricUnit = ref('C')
   const acceptedMetricUnits = ['C','F']
+  const unitConverter = {
+    kelvinToCelsius(i) {
+      return (i - 273,15).toFixed(0)
+    },
+    kelvinToFahrenheit(i){
+      return (i - 273,15) * 9/5 + 32
+    },
+    kelvinToPreferredUnit(temperature){
+      let newValue = ''
+      switch (metricUnit.value) {
+        case 'F':
+          newValue = (temperature - 273,15) * 9/5 + 32
+          break;
+        case 'C':
+        newValue = temperature - 273.15
+        break;
+        default:
+          break;
+      }
+      return newValue
+    }
+  }
 
   function setMetricUnit(newValue){
     if (acceptedMetricUnits.value.includes(newValue)){
@@ -89,8 +111,8 @@ export const userPreferences = defineStore('userPreferences', () => {
 
 
   return {
-    language, acceptedLanguages, toggleLanguage,
-    metricUnit, setMetricUnit,
+    language, acceptedLanguages, toggleLanguage, 
+    metricUnit, setMetricUnit, unitConverter,
     theme, toggleTheme
   }
 })
