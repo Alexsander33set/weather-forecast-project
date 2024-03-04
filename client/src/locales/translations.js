@@ -13,6 +13,7 @@ export const pt_br = {
   {
     "homepage":"Página Inicial"
   },
+  "summary":"Descrição",
   "months": [
     'Janeiro',
     'Fevereiro',
@@ -34,7 +35,18 @@ export const pt_br = {
     "Quarta-feira",
     "Quinta-feira",
     "Sexta-feira",
-    "Sábado"]
+    "Sábado"
+  ],
+  "weatherProps": {
+    "clouds": "Nuvens",
+    "humidity": "Umidade",
+    "wind": "Vento",
+    "wind_deg": "Direção do vento",
+    "pressure": "Pressão",
+    "feels_like": "Sensação térmica",
+    "rain":"Chuva",
+    "visibility":"Visibilidade",
+  }
 
 }
 
@@ -71,5 +83,15 @@ export const en_us = {
     "Thursday",
     "Friday",
     "Saturday"
-  ]
+  ],
+  "weatherProps": {
+    "clouds": "Clouds",
+    "humidity": "Humidity",
+    "wind": "Wind",
+    "wind_deg": "Wind degress",
+    "pressure": "Pressure",
+    "feels_like": "Feels Like",
+    "rain":"Rain",
+    "visibility":"Visibility",
+  }
 }

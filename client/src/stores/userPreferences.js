@@ -76,7 +76,7 @@ export const userPreferences = defineStore('userPreferences', () => {
         default:
           break;
       }
-      return newValue
+      return newValue.toFixed(0)
     }
   }
 

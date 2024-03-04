@@ -2,7 +2,6 @@ from flask import Blueprint, jsonify, request
 import os
 import requests
 from dotenv import load_dotenv
-# import re
 
 load_dotenv()
 

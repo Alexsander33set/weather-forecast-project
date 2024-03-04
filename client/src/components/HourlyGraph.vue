@@ -7,7 +7,6 @@
   const chartData = computed(() => {
     return 'something'
   })
-  console.log(props.hourlyList[0].clouds + chartData.value)
 </script>
 
 <template>

@@ -1,13 +1,13 @@
 <script setup>
 import axios from 'axios'
 import { ref, computed, watch } from 'vue';
+
 import { userPreferences } from '@/stores/userPreferences'
+const preferences = userPreferences()
+const convTemp = preferences.unitConverter.kelvinToPreferredUnit
 import HourlyGraph from '../components/HourlyGraph.vue'
 
-const preferences = userPreferences()
-
 const model = ref(null)
-const expand = ref(null)
 const isFirstLogin = ref(true)
 const bruteWeatherData = ref({})
 
@@ -104,9 +104,9 @@ async function firstLogin() {
   let getWeatherForecast = localStorage.getItem(('lastWeatherData'))
   if (getWeatherForecast) { isFirstLogin.value = false }
   else {
-    await IPGeolocation()
+    IPGeolocation()
     if (!geolocation.value.lat || !geolocation.value.lon) { return console.log(`Geolocation not valid | lat:${geolocation.value.lat} | lon:${geolocation.value.lon} |`); }
-    await getWeatherData(geolocation.value.lat, geolocation.value.lon)
+    getWeatherData(geolocation.value.lat, geolocation.value.lon)
   }
 }
 
@@ -121,41 +121,80 @@ firstLogin()
       :title="alert.event" :text="alert.description"></v-alert>
   </v-container>
   <v-container class="current">
-    <v-card class="mx-auto" density="comfortable">
-      <v-card-item :title="geolocation.city || 'Cidade não definida'">
-      </v-card-item>
-
-      <v-card-text class="py-0">
+    <v-card class="px-3" density="comfortable">
+        <template v-slot:title>
+        <div class="d-flex ga-3 align-center my-2">
+          <p>{{ geolocation.fullAddress.substring(0, geolocation.fullAddress.length - 2) || 'City is not defined' }}</p>
+        <v-text-field 
+          clearable 
+          label="Change city" 
+          density="compact"
+          variant="outlined"
+          style="max-width:344px;background-color: #F7FAFC; color: #4A809C"
+          append-inner-icon="mdi-magnify"
+          hide-details
+          single-line
+          
+          @click:append-inner="onClick"
+        ></v-text-field>
+        </div>
+      </template>
+      <template v-slot:subtitle>
+        <p class="text-subtitle-2">Updated at {{ new Date(bruteWeatherData.timestamp) }}</p>
+      </template>
+      <template v-slot:text>
         <v-row align="center" no-gutters>
-          <v-col class="text-h2" cols="6">
-            {{currentForecast.temp}}&deg;{{preferences.metricUnit}}
+          <v-col>
+            <div class="d-inline-block">
+              <h2 class="text-h2">
+              {{ convTemp(currentForecast.temp)}}&deg;{{preferences.metricUnit}}
+              </h2>
+            <p class="text-body-2 text-medium-emphasis text-center">Min {{ convTemp(currentForecast.temp) + '&deg;' + preferences.metricUnit}} Max {{ convTemp(currentForecast.temp) + '&deg;' + preferences.metricUnit}}</p>
+            </div>
+            <h3 class="text-h3 font-weight-light mt-3">
+              {{ capitalizeFirstLetter(currentForecast.weather[0].description)}}
+            </h3>
           </v-col>
 
           <v-col cols="6" class="text-right">
-            <img :src="'https://openweathermap.org/img/wn/'+currentForecast.weather[0].icon+'@4x.png'" :alt="currentForecast.weather[0].description" />
+            <v-card class="d-inline-block bg-blue-lighten-3 rounded-xl">
+              <img :src="'https://openweathermap.org/img/wn/'+currentForecast.weather[0].icon+'@4x.png'" :alt="currentForecast.weather[0].description" />
+            </v-card>
           </v-col>
         </v-row>
-      </v-card-text>
 
-      <div class="d-flex py-3 justify-space-between">
-        <v-list-item density="compact" prepend-icon="mdi-weather-windy">
-          <v-list-item-subtitle>123 km/h</v-list-item-subtitle>
-        </v-list-item>
+        <div class="d-flex py-3 ga-5">
+          <v-card v-if="currentForecast.wind_speed"
+            class="customCards"
+            :title="$t('weatherProps.wind')"
+            :text="(currentForecast.wind_speed * 3.6).toFixed(0) + ' km/h'"
+            append-icon="mdi-weather-windy"></v-card>
+            
+          <v-card v-if="currentForecast.humidity"
+            class="customCards"
+            :title="$t('weatherProps.humidity')"
+            :text="currentForecast.humidity + ' %'"
+            append-icon="mdi-water-percent"></v-card>
+            
+          <v-card v-if="currentForecast.clouds"
+            class="customCards"
+            :title="$t('weatherProps.clouds')"
+            :text="currentForecast.clouds + ' %'"
+            append-icon="mdi-cloud-outline"></v-card>
 
-        <v-list-item density="compact" prepend-icon="mdi-weather-pouring">
-          <v-list-item-subtitle>48%</v-list-item-subtitle>
-        </v-list-item>
-      </div>
+          <v-card v-if="currentForecast.visibility"
+            class="customCards"
+            :title="$t('weatherProps.visibility')"
+            :text="(currentForecast.visibility /100) + ' %'"
+            append-icon="mdi-eye-outline"></v-card>
 
-      <div v-if="expand">GUEGUEGUE</div>
-
-      <v-divider></v-divider>
-
-      <v-card-actions>
-        <v-btn @click="expand = !expand">
-          {{ !expand ? 'Full Report' : 'Hide Report' }}
-        </v-btn>
-      </v-card-actions>
+          <v-card v-if="currentForecast.rain"
+            class="customCards"
+            :title="$t('weatherProps.rain')"
+            :text="currentForecast.rain + ' %'"
+            append-icon="mdi-weather-pouring"></v-card>
+        </div>
+      </template>
     </v-card>
   </v-container>
   <HourlyGraph :hourlyList="hourlyForecast"/>
@@ -196,3 +235,9 @@ firstLogin()
     </v-sheet>
   </v-container>
 </template>
+<style>
+.customCards{
+  --bg-card-color: #F7FAFC;
+  background-color: var(--bg-card-color)
+}
+</style>
