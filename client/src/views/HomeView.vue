@@ -163,7 +163,7 @@ firstLogin()
           </v-col>
         </v-row>
 
-        <div class="d-flex py-3 ga-5">
+        <div class="d-flex py-3 ga-5 flex-wrap">
           <v-card v-if="currentForecast.wind_speed"
             class="customCards"
             :title="$t('weatherProps.wind')"
@@ -199,9 +199,8 @@ firstLogin()
   </v-container>
   <HourlyGraph :hourlyList="hourlyForecast"/>
   <v-container class="daily">
-    <h3>Daily</h3>
-    <v-sheet class="mx-auto">
-      <v-slide-group v-model="model" class="pa-4" selected-class="bg-primary" show-arrows>
+    <v-sheet class="mx-auto elevation-2">
+      <v-slide-group v-model="model" class="py-2" selected-class="bg-primary" show-arrows>
         <v-slide-group-item v-for="(day, index) in dailyForecast" :key="index" v-slot="{ isSelected, toggle, selectedClass }">
           <v-card color="blue-lighten-2" :class="['ma-4', selectedClass]"  @click="toggle">
             <div class="d-flex flex-column fill-height align-center justify-center pa-3">
