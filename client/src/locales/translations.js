@@ -14,6 +14,7 @@ export const pt_br = {
     "homepage":"Página Inicial"
   },
   "summary":"Descrição",
+  'input_change_city':'Mudar cidade',
   "months": [
     'Janeiro',
     'Fevereiro',
@@ -46,7 +47,8 @@ export const pt_br = {
     "feels_like": "Sensação térmica",
     "rain":"Chuva",
     "visibility":"Visibilidade",
-  }
+  },
+  "updated_in":"Atualizado em"
 
 }
 
@@ -61,6 +63,7 @@ export const en_us = {
   {
     "homepage":"Homepage"
   },
+  'input_change_city':'Change city',
   "months": [
     'January',
     'February',
@@ -93,5 +96,6 @@ export const en_us = {
     "feels_like": "Feels Like",
     "rain":"Rain",
     "visibility":"Visibility",
-  }
+  },
+  "updated_in":"Updated in"
 }

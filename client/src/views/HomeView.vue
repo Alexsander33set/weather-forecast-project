@@ -5,12 +5,14 @@ import { ref, computed, watch } from 'vue';
 import { userPreferences } from '@/stores/userPreferences'
 const preferences = userPreferences()
 const convTemp = preferences.unitConverter.kelvinToPreferredUnit
-import HourlyGraph from '../components/HourlyGraph.vue'
 
-const model = ref(null)
+//* Import components
+import HourlySection from '../components/layout/HourlySection.vue'
+import DailySection from '../components/layout/DailySection.vue'
+
+//* Declare variables
 const isFirstLogin = ref(true)
 const bruteWeatherData = ref({})
-
 if (localStorage.getItem("lastWeatherData")) {
   bruteWeatherData.value = JSON.parse(localStorage.getItem("lastWeatherData"))
 }
@@ -21,6 +23,18 @@ watch(
   },
   { deep: true }
 )
+
+const UpdatedDescription = function () {
+  let weatherRequestDate = new Date(bruteWeatherData.value.timestamp)
+  
+  return ( 
+    weatherRequestDate.toLocaleDateString(preferences.language.replace('_','-'))
+  )
+}
+
+const capitalizeFirstLetter = function (string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+}
 
 const geolocation = ref({
   'city': '',
@@ -58,11 +72,7 @@ const hourlyForecast = computed(() => {
   return bruteWeatherData.value.hourly
 })
 
-function capitalizeFirstLetter(string) {
-    return string.charAt(0).toUpperCase() + string.slice(1);
-}
-
-function getWeatherData(lat, lon) {
+const getWeatherData = function (lat, lon) {
   if (!lat || !lon) { return }
   axios.get('api/weather-data', { params: { lat: lat, lon: lon, lang: preferences.language, } })
     .then(res => {
@@ -73,7 +83,7 @@ function getWeatherData(lat, lon) {
     .catch(err => { console.error(err) })
 }
 
-function IPGeolocation() {
+const IPGeolocation = function () {
   axios.get('api/ip-geolocation')
     .then((res) => {
       geolocation.value = {
@@ -127,10 +137,11 @@ firstLogin()
           <p>{{ geolocation.fullAddress.substring(0, geolocation.fullAddress.length - 2) || 'City is not defined' }}</p>
         <v-text-field 
           clearable 
-          label="Change city" 
+          :label="$t('input_change_city')" 
+          class="bg-background text-primaryLight"
           density="compact"
           variant="outlined"
-          style="max-width:344px;background-color: #F7FAFC; color: #4A809C"
+          style="max-width:344px;"
           append-inner-icon="mdi-magnify"
           hide-details
           single-line
@@ -140,7 +151,7 @@ firstLogin()
         </div>
       </template>
       <template v-slot:subtitle>
-        <p class="text-subtitle-2">Updated at {{ new Date(bruteWeatherData.timestamp) }}</p>
+        <p class="text-subtitle-2">{{ $t('updated_in') + ' ' + UpdatedDescription() }}</p>
       </template>
       <template v-slot:text>
         <v-row align="center" no-gutters>
@@ -163,33 +174,33 @@ firstLogin()
           </v-col>
         </v-row>
 
-        <div class="d-flex py-3 ga-5 flex-wrap">
+        <div class="d-flex pt-5 pb-3 ga-5 flex-wrap">
           <v-card v-if="currentForecast.wind_speed"
-            class="customCards"
+            class="bg-primary"
             :title="$t('weatherProps.wind')"
             :text="(currentForecast.wind_speed * 3.6).toFixed(0) + ' km/h'"
             append-icon="mdi-weather-windy"></v-card>
             
           <v-card v-if="currentForecast.humidity"
-            class="customCards"
+            class="bg-primary"
             :title="$t('weatherProps.humidity')"
             :text="currentForecast.humidity + ' %'"
             append-icon="mdi-water-percent"></v-card>
             
           <v-card v-if="currentForecast.clouds"
-            class="customCards"
+            class="bg-primary"
             :title="$t('weatherProps.clouds')"
             :text="currentForecast.clouds + ' %'"
             append-icon="mdi-cloud-outline"></v-card>
 
           <v-card v-if="currentForecast.visibility"
-            class="customCards"
+            class="bg-primary"
             :title="$t('weatherProps.visibility')"
             :text="(currentForecast.visibility /100) + ' %'"
             append-icon="mdi-eye-outline"></v-card>
 
           <v-card v-if="currentForecast.rain"
-            class="customCards"
+            class="bg-primary"
             :title="$t('weatherProps.rain')"
             :text="currentForecast.rain + ' %'"
             append-icon="mdi-weather-pouring"></v-card>
@@ -197,46 +208,6 @@ firstLogin()
       </template>
     </v-card>
   </v-container>
-  <HourlyGraph :hourlyList="hourlyForecast"/>
-  <v-container class="daily">
-    <v-sheet class="mx-auto elevation-2">
-      <v-slide-group v-model="model" class="py-2" selected-class="bg-primary" show-arrows>
-        <v-slide-group-item v-for="(day, index) in dailyForecast" :key="index" v-slot="{ isSelected, toggle, selectedClass }">
-          <v-card color="blue-lighten-2" :class="['ma-4', selectedClass]"  @click="toggle">
-            <div class="d-flex flex-column fill-height align-center justify-center pa-3">
-              <h3 class="text-h6">{{ new Date(day.dt * 1000).getDate() }}/{{$t(`months.${parseInt(new Date(day.dt * 1000).getMonth())}`).substring(0, 3)}}</h3>
-              <img :src="'https://openweathermap.org/img/wn/'+day.weather[0].icon+'@2x.png'" :alt="day.weather[0].description" />
-              <p class="text-body-1">{{ `${preferences.unitConverter.kelvinToCelsius(day.temp.eve)} °${preferences.metricUnit}` }}</p>
-              <!-- <v-scale-transition>
-                <v-icon v-if="isSelected" color="white" size="48" icon="mdi-close-circle-outline"></v-icon>
-              </v-scale-transition> -->
-            </div> 
-          </v-card>
-        </v-slide-group-item>
-      </v-slide-group>
-
-      <v-expand-transition>
-        <v-sheet v-if="model != null" height="200">
-          <div class="d-flex flex-column fill-height justify-center">
-            <h3 class="text-h6">
-              {{ 
-                new Date(dailyForecast[model].dt * 1000).getDate() + ' ' + capitalizeFirstLetter($t(`months.${parseInt(new Date(dailyForecast[model].dt * 1000).getMonth())}`))
-              }}
-
-            </h3>
-            <hr>
-            <p class="text-body-1">{{ hourlyForecast[model] }}</p>
-            <hr>
-            <p></p>
-          </div>
-        </v-sheet>
-      </v-expand-transition>
-    </v-sheet>
-  </v-container>
+  <HourlySection :hourlyList="hourlyForecast"/>
+  <DailySection :dailyForecast="dailyForecast"/>
 </template>
-<style>
-.customCards{
-  --bg-card-color: #F7FAFC;
-  background-color: var(--bg-card-color)
-}
-</style>

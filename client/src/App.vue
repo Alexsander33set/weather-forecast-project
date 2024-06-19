@@ -6,11 +6,8 @@ import { userPreferences } from '@/stores/userPreferences'
 const theme = useTheme().global
 const preferences = userPreferences()
 
-//*TO COMPLETE (move to userPreferences)
-
 
 function toggleTheme() {
-  //* [Vuetify] useTheme must be called from inside a setup function
   theme.name.value = theme.current.value.dark ? 'light' : 'dark'
   this.preferences.theme = theme.name.value
 }
@@ -24,7 +21,7 @@ localStorage.setItem('lastWeatherData','{"alerts":[{"description":"INMET publica
 </script>
 
 <template>
-  <v-app style="background-color: #F7FAFC;">
+  <v-app>
     <v-app-bar :elevation="2">
       <v-toolbar-title>{{ $t('app_name') }}</v-toolbar-title>
       <v-spacer></v-spacer>
